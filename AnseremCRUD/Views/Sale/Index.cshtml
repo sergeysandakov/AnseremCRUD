@@ -1,0 +1,253 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<script src="~/Scripts/jquery-1.8.0.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        LoadSale();
+    });
+
+
+    function EditSale(saleId) {
+        $.ajax({
+            async: true,
+            type: 'GET',
+            url: '/Sale/EditSale',
+            data: { saleId: saleId },
+            dataType: 'JSON',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                $("#txtSaleId").val(data.saleId);
+                $("#txtSaleName").val(data.SaleName);
+                $("#txtCounterpartyName").val(data.CounterpartyName);
+                $("#txtResponsiblePerson").val(data.ResponsiblePerson);
+                $("#ContactPerson").val(data.ContactPerson);
+                $("#txtCityName").val(data.CityName);
+                $("#btnSaveUpdate").val('Обновить продажу');
+            },
+            error: function () {
+                alert("Неудачная попытка редактирования");
+            }
+        });
+    }
+
+        function DeleteSale(saleId) {
+            var saleId = { saleId : saleId };
+            confirm('Удалить продажу?');
+            $.ajax({
+                async: true,
+                type: 'POST',
+                url: '/Sale/DeleteSale',
+                data: JSON.stringify(saleId),
+                dataType: 'JSON',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.Success) {
+                        alert(data.Message);
+                        LoadSale();
+                    }
+                    else {
+                        alert(data.message);
+                    }
+                },
+                error: function () {
+                    alert('Какие то проблемы с операцией удаления.');
+                }
+            });
+        }
+
+
+    function ResetSale() {
+        $("#txtSaleId").val("");
+        $("#txtSaleName").val("0");
+        $("#txtCounterpartyName").val("");
+        $("#txtResponsiblePerson").val("");
+        $("#ContactPerson").val("");
+        $("#txtCityName").val("");
+        $("#ErrorMessage").empty();
+        $("#btnSaveUpdate").val("Добавить");
+    }
+
+    function AddSale() {
+        SaleViewModel = {
+            SaleId: $("#txtSaleId").val(),
+            SaleName: $("#txtSaleName").val(),
+            CounterpartyName: $("#txtCounterpartyName").val(),
+            ResponsiblePerson: $("#txtResponsiblePerson").val(),
+            ContactPerson: $("#ContactPerson").val(),
+            CityName: $("#txtCityName").val()
+        }
+
+        var errorMessage = "";
+
+        $.ajax({
+            async: true,
+            type: 'POST',
+            url: '/Sale/AddUpdateSale',
+            data: JSON.stringify(SaleViewModel),
+            dataType: 'JSON',
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                if (data.Success) {
+                    alert(data.Message);
+                    LoadSale();
+                    ResetSale();
+                } else {
+                    $.each(data.ErrorList, function (index, value) {
+                        errorMessage += value + '<br>';
+                    });
+                    $('#ErrorMessage').empty();
+                    $('#ErrorMessage').append(errorMessage);
+                }
+            },
+            error: function () {
+                alert('Ошибка добавления.');
+            }
+        });
+    }
+
+    function LoadSale() {
+        var BindSale = "";
+        $.ajax({
+            async: true,
+            type: 'GET',
+            url: '/Sale/GetAllSale',
+            dataType: 'JSON',
+            contentType: 'application/json; charset=utf-8',
+            success: function (response) {
+                if (response.Success) {
+                $.each(response.data,
+                    function (index, value) {
+                        BindSale += '<tr><td>' +
+                            value.SaleName +
+                            '</td><td>' +
+                            value.CounterpartyName +
+                            '</td><td>' +
+                            value.ContactPerson +
+                            '</td><td>' +
+                            value.ResponsiblePerson +
+                            '</td><td>' +
+                            value.CityName +
+                            '</td><td>' +
+                            '<input type="button" value="Edit" name="Редактировать" onclick="EditSale"(' + value.SaleId + ')"/> || <input type="button" value="Delete" name="удалить" onclick="DeleteSale"(' + value.SaleId + ')"/>'
+                            '</td></tr>';
+                    });
+                    $("#tableSale").find('tr:gt(0)').remove();
+                    $("#tableSale").append(BindSale);
+                }
+            },
+            error: function () {
+                alert('There is problem to load Sale');
+            }
+        })
+    }
+
+</script>
+
+<table style="width: 100%" class="table-bordered" id="tableSale">
+    <thead>
+        <tr>
+            <th>
+                Продажа
+            </th>
+            <th>
+                Контрагент
+            </th>
+            <th>
+                Контактное лицо
+            </th>
+            <th>
+                Ответственный за продажу 
+            </th>
+            <th>
+                Город
+            </th>
+        </tr>
+    </thead>
+</table>
+
+<br />
+<br />
+
+<input type="hidden" value="0" id="txtSaleId"/>
+
+<div class="text-danger" id="ErrorMessage">
+
+</div>
+
+<table>
+    <tr>
+        <td>
+            Продажа
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="SaleName" id="txtSaleName" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Контрагент
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="CounterpartyName" id="txtCounterpartyName" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Контактное лицо
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="ContactPerson" id="txtContactPerson" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Ответственный за продажу
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="ResponsiblePerson" id="txtResponsiblePerson" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Город
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="CityName" id="txtCityName" />
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+
+        </td>
+        <td>
+            <table>
+                <tr>
+                    <td>
+                        <br />
+                        <input id="btnSaveUpdate" type="button" value="Добавить" onclick="AddSale()" />
+                    </td>
+                    <td>
+                        <br />
+                        <input type="button" value="Перезаписать" onclick="ResetSale()" />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище SaleDBModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cities">
+          <Key>
+            <PropertyRef Name="CityId" />
+          </Key>
+          <Property Name="CityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Contacts">
+          <Key>
+            <PropertyRef Name="ContactId" />
+          </Key>
+          <Property Name="ContactId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContactPerson" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ResponsiblePerson" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Counterparties">
+          <Key>
+            <PropertyRef Name="CounterpartyId" />
+          </Key>
+          <Property Name="CounterpartyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CounterpartyName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CityId" Type="int" />
+        </EntityType>
+        <EntityType Name="Sales">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CounterpartyId" Type="int" />
+          <Property Name="ContactId" Type="int" />
+        </EntityType>
+        <Association Name="FK__Counterpa__CityI__276EDEB3">
+          <End Role="Cities" Type="Self.Cities" Multiplicity="0..1" />
+          <End Role="Counterparties" Type="Self.Counterparties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="CityId" />
+            </Principal>
+            <Dependent Role="Counterparties">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sales__ContactId__2B3F6F97">
+          <End Role="Contacts" Type="Self.Contacts" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contacts">
+              <PropertyRef Name="ContactId" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="ContactId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sales__Counterpa__2A4B4B5E">
+          <End Role="Counterparties" Type="Self.Counterparties" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Counterparties">
+              <PropertyRef Name="CounterpartyId" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="CounterpartyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище SaleDBModelContainer">
+          <EntitySet Name="Cities" EntityType="Self.Cities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contacts" EntityType="Self.Contacts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Counterparties" EntityType="Self.Counterparties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sales" EntityType="Self.Sales" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Counterpa__CityI__276EDEB3" Association="Self.FK__Counterpa__CityI__276EDEB3">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="Counterparties" EntitySet="Counterparties" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sales__ContactId__2B3F6F97" Association="Self.FK__Sales__ContactId__2B3F6F97">
+            <End Role="Contacts" EntitySet="Contacts" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sales__Counterpa__2A4B4B5E" Association="Self.FK__Sales__Counterpa__2A4B4B5E">
+            <End Role="Counterparties" EntitySet="Counterparties" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SaleDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cities">
+          <Key>
+            <PropertyRef Name="CityId" />
+          </Key>
+          <Property Name="CityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Counterparties" Relationship="Self.FK__Counterpa__CityI__276EDEB3" FromRole="Cities" ToRole="Counterparties" />
+        </EntityType>
+        <EntityType Name="Contacts">
+          <Key>
+            <PropertyRef Name="ContactId" />
+          </Key>
+          <Property Name="ContactId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContactPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ResponsiblePerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK__Sales__ContactId__2B3F6F97" FromRole="Contacts" ToRole="Sales" />
+        </EntityType>
+        <EntityType Name="Counterparties">
+          <Key>
+            <PropertyRef Name="CounterpartyId" />
+          </Key>
+          <Property Name="CounterpartyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CounterpartyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CityId" Type="Int32" />
+          <NavigationProperty Name="Cities" Relationship="Self.FK__Counterpa__CityI__276EDEB3" FromRole="Counterparties" ToRole="Cities" />
+          <NavigationProperty Name="Sales" Relationship="Self.FK__Sales__Counterpa__2A4B4B5E" FromRole="Counterparties" ToRole="Sales" />
+        </EntityType>
+        <EntityType Name="Sales">
+          <Key>
+            <PropertyRef Name="SaleId" />
+          </Key>
+          <Property Name="SaleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SaleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CounterpartyId" Type="Int32" />
+          <Property Name="ContactId" Type="Int32" />
+          <NavigationProperty Name="Contacts" Relationship="Self.FK__Sales__ContactId__2B3F6F97" FromRole="Sales" ToRole="Contacts" />
+          <NavigationProperty Name="Counterparties" Relationship="Self.FK__Sales__Counterpa__2A4B4B5E" FromRole="Sales" ToRole="Counterparties" />
+        </EntityType>
+        <Association Name="FK__Counterpa__CityI__276EDEB3">
+          <End Role="Cities" Type="Self.Cities" Multiplicity="0..1" />
+          <End Role="Counterparties" Type="Self.Counterparties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cities">
+              <PropertyRef Name="CityId" />
+            </Principal>
+            <Dependent Role="Counterparties">
+              <PropertyRef Name="CityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sales__ContactId__2B3F6F97">
+          <End Role="Contacts" Type="Self.Contacts" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contacts">
+              <PropertyRef Name="ContactId" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="ContactId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Sales__Counterpa__2A4B4B5E">
+          <End Role="Counterparties" Type="Self.Counterparties" Multiplicity="0..1" />
+          <End Role="Sales" Type="Self.Sales" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Counterparties">
+              <PropertyRef Name="CounterpartyId" />
+            </Principal>
+            <Dependent Role="Sales">
+              <PropertyRef Name="CounterpartyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="SaleDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cities" EntityType="Self.Cities" />
+          <EntitySet Name="Contacts" EntityType="Self.Contacts" />
+          <EntitySet Name="Counterparties" EntityType="Self.Counterparties" />
+          <EntitySet Name="Sales" EntityType="Self.Sales" />
+          <AssociationSet Name="FK__Counterpa__CityI__276EDEB3" Association="Self.FK__Counterpa__CityI__276EDEB3">
+            <End Role="Cities" EntitySet="Cities" />
+            <End Role="Counterparties" EntitySet="Counterparties" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sales__ContactId__2B3F6F97" Association="Self.FK__Sales__ContactId__2B3F6F97">
+            <End Role="Contacts" EntitySet="Contacts" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Sales__Counterpa__2A4B4B5E" Association="Self.FK__Sales__Counterpa__2A4B4B5E">
+            <End Role="Counterparties" EntitySet="Counterparties" />
+            <End Role="Sales" EntitySet="Sales" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище SaleDBModelContainer" CdmEntityContainer="SaleDBEntities">
+          <EntitySetMapping Name="Cities">
+            <EntityTypeMapping TypeName="SaleDBModel.Cities">
+              <MappingFragment StoreEntitySet="Cities">
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contacts">
+            <EntityTypeMapping TypeName="SaleDBModel.Contacts">
+              <MappingFragment StoreEntitySet="Contacts">
+                <ScalarProperty Name="ContactId" ColumnName="ContactId" />
+                <ScalarProperty Name="ContactPerson" ColumnName="ContactPerson" />
+                <ScalarProperty Name="ResponsiblePerson" ColumnName="ResponsiblePerson" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Counterparties">
+            <EntityTypeMapping TypeName="SaleDBModel.Counterparties">
+              <MappingFragment StoreEntitySet="Counterparties">
+                <ScalarProperty Name="CounterpartyId" ColumnName="CounterpartyId" />
+                <ScalarProperty Name="CounterpartyName" ColumnName="CounterpartyName" />
+                <ScalarProperty Name="CityId" ColumnName="CityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sales">
+            <EntityTypeMapping TypeName="SaleDBModel.Sales">
+              <MappingFragment StoreEntitySet="Sales">
+                <ScalarProperty Name="SaleId" ColumnName="SaleId" />
+                <ScalarProperty Name="SaleName" ColumnName="SaleName" />
+                <ScalarProperty Name="CounterpartyId" ColumnName="CounterpartyId" />
+                <ScalarProperty Name="ContactId" ColumnName="ContactId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
